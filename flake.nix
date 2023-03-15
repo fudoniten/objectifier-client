@@ -16,14 +16,14 @@
         default = objectifier-client;
         objectifier-client = helpers.packages."${system}".mkClojureBin {
           name = "org.fudo/objectifier-client";
-          primary-namespace = "objectifier-client.cli";
+          primaryNamespace = "objectifier-client.cli";
           src = ./.;
         };
       };
 
       devShells = let pkgs = import nixpkgs { inherit system; };
       in rec {
-        default = update-deps;
+        default = objectifier-client;
         objectifier-client = pkgs.mkShell {
           buildInputs = [ self.packages."${system}".objectifier-client ];
         };

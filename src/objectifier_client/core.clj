@@ -1,16 +1,17 @@
 (ns objectifier-client.core
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
+            [clojure.string :as str]
             [slingshot.slingshot :refer [throw+]])
   (:import java.net.URL
            java.io.ByteArrayInputStream))
 
 (defprotocol IObjectifierClient
-  (get!              [_ image-data])
-  (get-labels!       [_ image-data])
-  (get-detections!   [_ image-data])
-  (get-highlights!   [_ image-data])
-  (get-probabilites! [_ image-data]))
+  (get!               [_ image-data])
+  (get-labels!        [_ image-data])
+  (get-detections!    [_ image-data])
+  (get-highlights!    [_ image-data])
+  (get-probabilities! [_ image-data]))
 
 (defn- url->string [url] (.toExternalForm url))
 
@@ -23,9 +24,15 @@
                  {:multipart [{:name "image"
                                :content input-stream}]})))
 
+(defn- to-keyword [str]
+  (-> str
+      (str/lower-case)
+      (str/replace #" " "-")
+      (keyword)))
+
 (defn- process-response [resp]
   (if (<= 200 (:status resp) 299)
-    (-> resp :body (json/read-str :key-fn keyword))
+    (-> resp :body (json/read-str :key-fn to-keyword))
     (throw+ {:type     ::http-error
              :status   (:status resp)
              :reason   (:reason-phrase resp)
@@ -48,13 +55,13 @@
     (-> (get! self image-data)
         :output))
 
-  (get-probabilites! [self image-data]
+  (get-probabilities! [self image-data]
     (into {}
           (map (juxt (comp keyword :label) :confidence))
           (get-detections! self image-data))))
 
 (defn define-connection
-  [{:keys [scheme host port]
-    :or   {scheme "http"
-           port   80}}]
+  [& {:keys [scheme host port]
+      :or   {scheme "http"
+             port   80}}]
   (->ObjectifierClient scheme host port))

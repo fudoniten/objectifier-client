@@ -268,6 +268,16 @@
       "hash": "sha256-bY3hTDrIdXYMX/kJVi/5hzB3AxxquTnxyxOeFp/pB1g="
     },
     {
+      "mvn-path": "org/clojure/tools.cli/1.0.214/tools.cli-1.0.214.jar",
+      "mvn-repo": "https://repo1.maven.org/maven2/",
+      "hash": "sha256-7h4iTowAv6wht2tSC3D5WF0nj4al16wMelXpGt8PTqM="
+    },
+    {
+      "mvn-path": "org/clojure/tools.cli/1.0.214/tools.cli-1.0.214.pom",
+      "mvn-repo": "https://repo1.maven.org/maven2/",
+      "hash": "sha256-ulk+rq6K6NhkVBgYjY1707XNndYKY5w04fBuGyqDpIQ="
+    },
+    {
       "mvn-path": "potemkin/potemkin/0.4.5/potemkin-0.4.5.jar",
       "mvn-repo": "https://repo.clojars.org/",
       "hash": "sha256-KzZsg02Hy26mMbpoaXvDdNDRr4H23rQsKECUTaMgvZk="

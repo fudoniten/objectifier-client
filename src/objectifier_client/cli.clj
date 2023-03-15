@@ -2,7 +2,8 @@
   (:require [objectifier-client.core :as obj]
             [clojure.java.io :as io]
             [clojure.tools.cli :as cli]
-            [clojure.string :as str]))
+            [clojure.string :as str])
+  (:gen-class))
 
 (defn- read-file-bytes [filename]
   (with-open [in  (java.io.FileInputStream. filename)
@@ -41,20 +42,20 @@
                        prob)))))
 
 (defn- display-labels [client filenames]
-  (distinct
-   (mapcat (fn [filename]
-             (obj/get-labels! client (read-file-bytes filename)))
-           filenames)))
+  (let [labels (distinct
+                (mapcat (fn [filename] (obj/get-labels! client (read-file-bytes filename)))
+                        filenames))]
+    (doseq [label labels] (println label))))
 
 (defn -main [& args]
-  (let [{:keys [options arguments summary errors]}]
+  (let [{:keys [options arguments summary errors]} (cli/parse-opts args cli-opts)]
     (when (seq errors)
       (msg-quit 1 (usage summary errors)))
     (when (:help options)
       (msg-quit 0 (usage summary)))
-    (when (empty? (arguments))
+    (when (empty? arguments)
       (msg-quit 0 (usage summary ["No files provided to scan."])))
-    (let [client (obj/define-connection "http" (:server options) (:port options))]
+    (let [client (obj/define-connection :host (:server options) :port (:port options))]
       (if (:labels options)
         (display-labels client arguments)
         (doseq [file arguments]
