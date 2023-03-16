@@ -2,7 +2,8 @@
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
             [clojure.string :as str]
-            [slingshot.slingshot :refer [throw+]])
+            [slingshot.slingshot :refer [throw+]]
+            [clojure.pprint :refer [pprint]])
   (:import java.net.URL
            java.io.ByteArrayInputStream))
 
@@ -38,10 +39,12 @@
              :reason   (:reason-phrase resp)
              :response resp})))
 
+(defn- pthru [o] (pprint o) o)
+
 (defrecord ObjectifierClient [scheme host port]
   IObjectifierClient
   (get! [self image-data]
-    (process-response (send-image! (build-url self) image-data)))
+    (process-response (send-image! (build-url (pthru self)) image-data)))
 
   (get-labels! [self image-data]
     (-> (get! self image-data)
