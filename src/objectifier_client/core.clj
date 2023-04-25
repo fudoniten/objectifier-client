@@ -24,7 +24,7 @@
   (when verbose
     (println (str "sending "
                   (count image-bytes)
-                  " to "
+                  " bytes to "
                   url
                   " for object detection")))
   (let [input-stream (ByteArrayInputStream. image-bytes)]
