@@ -2,9 +2,9 @@
   description = "Objectifier Client";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-22.11";
+    nixpkgs.url = "nixpkgs/nixos-23.11";
     helpers = {
-      url = "git+https://git.fudo.org/fudo-public/nix-helpers.git";
+      url = "git+https://fudo.dev/public/nix-helpers.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     utils.url = "github:numtide/flake-utils";
